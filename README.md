@@ -77,3 +77,7 @@ Año: 2026
 Estado del proyecto
 
 Proyecto en fase de organización y desarrollo inicial.
+
+Próxima etapa
+
+Implementación de la estructura MVC y configuración de la base de datos SQLite para el desarrollo del sistema EspacioYa.
