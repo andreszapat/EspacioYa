@@ -1,0 +1,40 @@
+Collecting pywebview==5.4
+  Downloading pywebview-5.4-py3-none-any.whl.metadata (4.5 kB)
+Collecting pythonnet==3.1.0
+  Downloading pythonnet-3.1.0-cp310.cp311.cp312.cp313.cp314-none-win32.win_amd64.whl.metadata (6.5 kB)
+Collecting proxy_tools (from pywebview==5.4)
+  Downloading proxy_tools-0.1.0.tar.gz (3.0 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting bottle (from pywebview==5.4)
+  Downloading bottle-0.13.4-py2.py3-none-any.whl.metadata (1.6 kB)
+Collecting typing_extensions (from pywebview==5.4)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting clr_loader<0.4.0,>=0.3.1 (from pythonnet==3.1.0)
+  Downloading clr_loader-0.3.1-py3-none-any.whl.metadata (1.4 kB)
+Collecting cffi>=1.17 (from clr_loader<0.4.0,>=0.3.1->pythonnet==3.1.0)
+  Downloading cffi-2.1.1-cp314-cp314-win_amd64.whl.metadata (2.6 kB)
+Collecting pycparser (from cffi>=1.17->clr_loader<0.4.0,>=0.3.1->pythonnet==3.1.0)
+  Downloading pycparser-3.11-py3-none-any.whl.metadata (8.2 kB)
+Downloading pywebview-5.4-py3-none-any.whl (475 kB)
+Downloading pythonnet-3.1.0-cp310.cp311.cp312.cp313.cp314-none-win32.win_amd64.whl (1.6 MB)
+   ---------------------------------------- 1.6/1.6 MB 6.2 MB/s  0:00:00
+Downloading clr_loader-0.3.1-py3-none-any.whl (55 kB)
+Downloading cffi-2.1.1-cp314-cp314-win_amd64.whl (187 kB)
+Downloading bottle-0.13.4-py2.py3-none-any.whl (103 kB)
+Downloading pycparser-3.11-py3-none-any.whl (51 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Building wheels for collected packages: proxy_tools
+  Building wheel for proxy_tools (pyproject.toml): started
+  Building wheel for proxy_tools (pyproject.toml): finished with status 'done'
+  Created wheel for proxy_tools: filename=proxy_tools-0.1.0-py3-none-any.whl size=2944 sha256=51417d0eb75ec15290a7633a9b0ce43e1a001207280b1c500b64c299517ecefa
+  Stored in directory: C:\Users\sebas\AppData\Local\Temp\pip-ephem-wheel-cache-iqltiv5m\wheels\54\b4\ac\2b81b90ec2895608a2d68ceca60a4476b409bdfe16398a4251
+Successfully built proxy_tools
+Installing collected packages: proxy_tools, bottle, typing_extensions, pycparser, cffi, clr_loader, pythonnet, pywebview
+
+Successfully installed bottle-0.13.4 cffi-2.1.1 clr_loader-0.3.1 proxy_tools-0.1.0 pycparser-3.11 pythonnet-3.1.0 pywebview-5.4 typing_extensions-4.16.0
+fin 0 

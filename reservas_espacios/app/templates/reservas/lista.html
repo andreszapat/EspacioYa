@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "_macros.html" import boton_eliminar, etiqueta_rol %}
+{% block titulo %}Reservas{% endblock %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>Reservas</h1>
+        <p class="sutil">{{ 'Todas las reservas' if filtros.todas else 'Reservas desde hoy' }}</p>
+    </div>
+    <a class="boton boton--primario" href="{{ url_for('reservas.crear') }}">+ Nueva reserva</a>
+</section>
+
+<form method="get" class="panel filtros">
+    <div class="campo">
+        <label for="f-fecha">Fecha</label>
+        <input id="f-fecha" type="date" name="fecha" value="{{ filtros.fecha }}">
+    </div>
+    <div class="campo">
+        <label for="f-espacio">Espacio</label>
+        <select id="f-espacio" name="espacio_id">
+            <option value="">Todos</option>
+            {% for e in espacios %}<option value="{{ e.id }}" {{ 'selected' if filtros.espacio_id == e.id }}>{{ e.nombre }}</option>{% endfor %}
+        </select>
+    </div>
+    <label class="interruptor"><input type="checkbox" name="todas" {{ 'checked' if filtros.todas }}><span>Incluir pasadas</span></label>
+    <div class="filtros__acciones">
+        <button class="boton" type="submit">Filtrar</button>
+        <a class="boton boton--texto" href="{{ url_for('reservas.listar') }}">Limpiar</a>
+    </div>
+</form>
+
+{% if reservas %}
+<div class="tabla-envoltura">
+<table class="tabla">
+    <thead><tr><th>Fecha</th><th>Horario</th><th>Espacio</th><th>Usuario</th><th>Propósito</th><th></th></tr></thead>
+    <tbody>
+    {% for r in reservas %}
+        <tr class="{{ 'fila--pasada' if r.fecha < hoy }}">
+            <td class="nowrap"><a href="{{ url_for('reservas.calendario', fecha=r.fecha) }}">{{ r.fecha }}</a></td>
+            <td class="nowrap">{{ r.hora_inicio }} – {{ r.hora_fin }}</td>
+            <td>{{ r.espacio }}</td>
+            <td>{{ r.usuario }} {{ etiqueta_rol(r.rol) }}</td>
+            <td>{{ r.proposito }}</td>
+            <td class="acciones">
+                <a class="boton boton--chico" href="{{ url_for('reservas.editar', reserva_id=r.id) }}">Editar</a>
+                {{ boton_eliminar(url_for('reservas.eliminar', reserva_id=r.id), '¿Cancelar esta reserva?', request.full_path) }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="vacio">No hay reservas con esos filtros.</p>
+{% endif %}
+{% endblock %}

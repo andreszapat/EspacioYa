@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<section class="encabezado"><h1>{{ titulo }}</h1></section>
+
+<form method="post" class="panel formulario" novalidate data-validar>
+    <div class="campo campo--ancho">
+        <label for="nombre">Nombre completo *</label>
+        <input id="nombre" name="nombre" required maxlength="100" value="{{ datos.get('nombre', '') }}">
+    </div>
+    <div class="campo">
+        <label for="correo">Correo electrónico *</label>
+        <input id="correo" name="correo" type="email" required maxlength="120" value="{{ datos.get('correo', '') }}" placeholder="nombre@universidad.edu.co">
+    </div>
+    <div class="campo">
+        <label for="telefono">Teléfono de contacto</label>
+        <input id="telefono" name="telefono" maxlength="20" pattern="\+?[\d\s()\-]{7,20}" value="{{ datos.get('telefono', '') }}" data-mensaje="Use solo dígitos, espacios, guiones y +.">
+    </div>
+    <fieldset class="campo campo--ancho">
+        <legend>Rol *</legend>
+        <div class="opciones-rol">
+        {% for rol in roles %}
+            <label class="opcion-rol">
+                <input type="radio" name="rol" value="{{ rol.valor }}" required {{ 'checked' if datos.get('rol') == rol.valor }}>
+                <span><strong>{{ rol.etiqueta }}</strong><small>Hasta {{ rol.max_horas }} h por reserva</small></span>
+            </label>
+        {% endfor %}
+        </div>
+    </fieldset>
+    <div class="formulario__acciones campo--ancho">
+        <a class="boton" href="{{ url_for('usuarios.listar') }}">Cancelar</a>
+        <button class="boton boton--primario" type="submit">Guardar</button>
+    </div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/formularios.js') }}"></script>{% endblock %}

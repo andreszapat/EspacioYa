@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import boton_eliminar %}
+{% block titulo %}Espacios{% endblock %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>Espacios</h1>
+        <p class="sutil">Salas, aulas y espacios compartidos disponibles para reserva.</p>
+    </div>
+    <a class="boton boton--primario" href="{{ url_for('espacios.crear') }}">+ Nuevo espacio</a>
+</section>
+
+{% if espacios %}
+<div class="tabla-envoltura">
+<table class="tabla">
+    <thead>
+        <tr><th>Nombre</th><th>Capacidad</th><th>Ubicación</th><th>Horario</th><th>Equipamiento</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for e in espacios %}
+        <tr>
+            <td><strong>{{ e.nombre }}</strong></td>
+            <td>{{ e.capacidad }} personas</td>
+            <td>{{ e.ubicacion }}</td>
+            <td class="nowrap">{{ e.hora_apertura }} – {{ e.hora_cierre }}</td>
+            <td>{% for item in e.lista_equipamiento %}<span class="chip">{{ item }}</span>{% else %}<span class="sutil">—</span>{% endfor %}</td>
+            <td>{% if e.habilitado %}<span class="insignia insignia--ok">Habilitado</span>{% else %}<span class="insignia insignia--off">Deshabilitado</span>{% endif %}</td>
+            <td class="acciones">
+                <a class="boton boton--chico" href="{{ url_for('espacios.editar', espacio_id=e.id) }}">Editar</a>
+                {{ boton_eliminar(url_for('espacios.eliminar', espacio_id=e.id), '¿Eliminar el espacio ' ~ e.nombre ~ '?') }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="vacio">Aún no hay espacios registrados.</p>
+{% endif %}
+{% endblock %}

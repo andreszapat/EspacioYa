@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_macros.html" import etiqueta_rol %}
+{% block titulo %}{{ usuario.nombre }}{% endblock %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>{{ usuario.nombre }} {{ etiqueta_rol(usuario.rol) }}</h1>
+        <p class="sutil">{{ usuario.correo }}{% if usuario.telefono %} · {{ usuario.telefono }}{% endif %} · Máximo {{ usuario.max_horas_reserva }} h por reserva</p>
+    </div>
+    <a class="boton boton--primario" href="{{ url_for('reservas.crear', usuario_id=usuario.id) }}">+ Reservar para este usuario</a>
+</section>
+
+<section class="panel">
+    <h2>Historial de reservas</h2>
+    {% if reservas %}
+    <ul class="lista-reservas">
+        {% for r in reservas %}
+        <li>
+            <div class="lista-reservas__hora">{{ r.fecha }}<br><strong>{{ r.hora_inicio }}–{{ r.hora_fin }}</strong></div>
+            <div><strong>{{ r.espacio }}</strong> · {{ r.ubicacion }}<br><span class="sutil">{{ r.proposito }}</span></div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="vacio">Este usuario no tiene reservas.</p>
+    {% endif %}
+</section>
+{% endblock %}

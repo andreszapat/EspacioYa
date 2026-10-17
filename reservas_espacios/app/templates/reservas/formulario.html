@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<section class="encabezado"><h1>{{ titulo }}</h1></section>
+
+{% if not usuarios or not espacios %}
+<div class="alerta alerta--aviso">
+    Para reservar necesita al menos un <a href="{{ url_for('usuarios.crear') }}">usuario</a> y un
+    <a href="{{ url_for('espacios.crear') }}">espacio habilitado</a>.
+</div>
+{% endif %}
+
+<div class="reserva-layout">
+<form method="post" id="form-reserva" class="panel formulario" novalidate data-validar
+      data-api="{{ url_for('api.ocupacion') }}" data-reserva-id="{{ reserva_id or '' }}">
+    <div class="campo campo--ancho">
+        <label for="usuario_id">Usuario *</label>
+        <select id="usuario_id" name="usuario_id" required>
+            <option value="">Seleccione…</option>
+            {% for u in usuarios %}
+            <option value="{{ u.id }}" data-max-horas="{{ u.max_horas_reserva }}" data-rol="{{ u.etiqueta_rol }}"
+                {{ 'selected' if datos.get('usuario_id') | string == u.id | string }}>{{ u.nombre }} ({{ u.etiqueta_rol }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="campo campo--ancho">
+        <label for="espacio_id">Espacio *</label>
+        <select id="espacio_id" name="espacio_id" required>
+            <option value="">Seleccione…</option>
+            {% for e in espacios %}
+            <option value="{{ e.id }}" {{ 'selected' if datos.get('espacio_id') | string == e.id | string }}>
+                {{ e.nombre }} · {{ e.capacidad }} pers. · {{ e.hora_apertura }}–{{ e.hora_cierre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="campo">
+        <label for="fecha">Fecha *</label>
+        <input id="fecha" name="fecha" type="date" required min="{{ hoy }}" value="{{ datos.get('fecha', '') }}">
+    </div>
+    <div class="campo campo--doble">
+        <div>
+            <label for="hora_inicio">Hora inicio *</label>
+            <input id="hora_inicio" name="hora_inicio" type="time" required step="900" value="{{ datos.get('hora_inicio', '') }}">
+        </div>
+        <div>
+            <label for="hora_fin">Hora fin *</label>
+            <input id="hora_fin" name="hora_fin" type="time" required step="900" value="{{ datos.get('hora_fin', '') }}">
+        </div>
+    </div>
+    <div class="campo campo--ancho">
+        <label for="proposito">Propósito o motivo *</label>
+        <textarea id="proposito" name="proposito" required maxlength="300" rows="3" placeholder="Ej. Sustentación del mini-proyecto">{{ datos.get('proposito', '') }}</textarea>
+    </div>
+    <div id="aviso-disponibilidad" class="alerta campo--ancho" hidden aria-live="polite"></div>
+    <div class="formulario__acciones campo--ancho">
+        <a class="boton" href="{{ url_for('reservas.listar') }}">Volver</a>
+        <button class="boton boton--primario" type="submit">Guardar reserva</button>
+    </div>
+</form>
+
+<aside class="panel ocupacion">
+    <h2>Ocupación del día</h2>
+    <p id="ocupacion-horario" class="sutil">Seleccione un espacio y una fecha.</p>
+    <ul id="ocupacion-lista" class="ocupacion__lista"></ul>
+</aside>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/formularios.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reservas.js') }}"></script>
+{% endblock %}

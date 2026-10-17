@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<section class="encabezado"><h1>{{ titulo }}</h1></section>
+
+<form method="post" class="panel formulario" novalidate data-validar>
+    <div class="campo campo--ancho">
+        <label for="nombre">Nombre *</label>
+        <input id="nombre" name="nombre" required maxlength="100" value="{{ datos.get('nombre', '') }}" placeholder="Ej. Sala de Juntas A">
+    </div>
+    <div class="campo">
+        <label for="capacidad">Capacidad máxima *</label>
+        <input id="capacidad" name="capacidad" type="number" min="1" max="5000" required value="{{ datos.get('capacidad', '') }}">
+    </div>
+    <div class="campo">
+        <label for="ubicacion">Ubicación física *</label>
+        <input id="ubicacion" name="ubicacion" required maxlength="150" value="{{ datos.get('ubicacion', '') }}" placeholder="Bloque, piso, sede">
+    </div>
+    <div class="campo">
+        <label for="hora_apertura">Hora de apertura *</label>
+        <input id="hora_apertura" name="hora_apertura" type="time" required value="{{ datos.get('hora_apertura', '') }}">
+    </div>
+    <div class="campo">
+        <label for="hora_cierre">Hora de cierre *</label>
+        <input id="hora_cierre" name="hora_cierre" type="time" required value="{{ datos.get('hora_cierre', '') }}" data-despues-de="hora_apertura" data-mensaje="El cierre debe ser posterior a la apertura.">
+    </div>
+    <div class="campo campo--ancho">
+        <label for="equipamiento">Equipamiento disponible</label>
+        <textarea id="equipamiento" name="equipamiento" maxlength="500" rows="2" placeholder="Separado por comas: video beam, tablero, sonido">{{ datos.get('equipamiento', '') }}</textarea>
+    </div>
+    <label class="interruptor campo--ancho">
+        <input type="checkbox" name="habilitado" {{ 'checked' if datos.get('habilitado') }}>
+        <span>Espacio habilitado para reservas</span>
+    </label>
+    <div class="formulario__acciones campo--ancho">
+        <a class="boton" href="{{ url_for('espacios.listar') }}">Cancelar</a>
+        <button class="boton boton--primario" type="submit">Guardar</button>
+    </div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/formularios.js') }}"></script>{% endblock %}

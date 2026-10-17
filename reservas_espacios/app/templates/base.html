@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}Inicio{% endblock %} · Reservas de Espacios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+{% set ep = request.endpoint or '' %}
+<header class="barra">
+    <div class="contenedor barra__contenido">
+        <a class="marca" href="{{ url_for('inicio.index') }}"><span class="marca__icono">▦</span> ReservaEspacios</a>
+        <nav class="menu">
+            <a href="{{ url_for('reservas.calendario') }}" class="{{ 'activo' if ep == 'reservas.calendario' }}">Disponibilidad</a>
+            <a href="{{ url_for('reservas.listar') }}" class="{{ 'activo' if ep.startswith('reservas.') and ep != 'reservas.calendario' }}">Reservas</a>
+            <a href="{{ url_for('espacios.listar') }}" class="{{ 'activo' if ep.startswith('espacios.') }}">Espacios</a>
+            <a href="{{ url_for('usuarios.listar') }}" class="{{ 'activo' if ep.startswith('usuarios.') }}">Usuarios</a>
+        </nav>
+    </div>
+</header>
+
+<main class="contenedor">
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensaje in mensajes %}
+            <div class="alerta alerta--{{ categoria }}" role="alert">{{ mensaje }}</div>
+        {% endfor %}
+    {% endwith %}
+    {% block contenido %}{% endblock %}
+</main>
+
+<footer class="pie">
+    <div class="contenedor">Sistema de Reservas de Espacios · Lenguajes de Programación 2026B · Flask + SQLite</div>
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

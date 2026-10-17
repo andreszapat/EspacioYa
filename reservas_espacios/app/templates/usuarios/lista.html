@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import boton_eliminar, etiqueta_rol %}
+{% block titulo %}Usuarios{% endblock %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>Usuarios</h1>
+        <p class="sutil">Personas autorizadas para realizar reservas.</p>
+    </div>
+    <a class="boton boton--primario" href="{{ url_for('usuarios.crear') }}">+ Nuevo usuario</a>
+</section>
+
+{% if usuarios %}
+<div class="tabla-envoltura">
+<table class="tabla">
+    <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Teléfono</th><th>Máx. por reserva</th><th></th></tr></thead>
+    <tbody>
+    {% for u in usuarios %}
+        <tr>
+            <td><a href="{{ url_for('usuarios.detalle', usuario_id=u.id) }}"><strong>{{ u.nombre }}</strong></a></td>
+            <td>{{ u.correo }}</td>
+            <td>{{ etiqueta_rol(u.rol) }}</td>
+            <td>{{ u.telefono or '—' }}</td>
+            <td>{{ u.max_horas_reserva }} h</td>
+            <td class="acciones">
+                <a class="boton boton--chico" href="{{ url_for('usuarios.editar', usuario_id=u.id) }}">Editar</a>
+                {{ boton_eliminar(url_for('usuarios.eliminar', usuario_id=u.id), '¿Eliminar a ' ~ u.nombre ~ '?') }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="vacio">Aún no hay usuarios registrados.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block titulo %}Disponibilidad{% endblock %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>Disponibilidad de espacios</h1>
+        <p class="sutil">{{ dia | fecha_larga | capitalize }} · {{ tabla.total_reservas }} reserva(s)</p>
+    </div>
+    <form method="get" class="navegador-fecha">
+        <a class="boton" href="{{ url_for('reservas.calendario', fecha=anterior) }}" aria-label="Día anterior">‹</a>
+        <input type="date" name="fecha" value="{{ tabla.fecha }}" onchange="this.form.submit()">
+        <a class="boton" href="{{ url_for('reservas.calendario', fecha=siguiente) }}" aria-label="Día siguiente">›</a>
+        {% if tabla.fecha != hoy %}<a class="boton boton--texto" href="{{ url_for('reservas.calendario') }}">Hoy</a>{% endif %}
+    </form>
+</section>
+
+<div class="leyenda">
+    <span><i class="muestra muestra--libre"></i>Libre (clic para reservar)</span>
+    <span><i class="muestra muestra--reservado"></i>Reservado</span>
+    <span><i class="muestra muestra--cerrado"></i>Fuera de horario</span>
+</div>
+
+{% if tabla.espacios %}
+<div class="tabla-envoltura">
+<table class="calendario">
+    <thead>
+        <tr>
+            <th class="calendario__hora">Hora</th>
+            {% for e in tabla.espacios %}
+            <th>{{ e.nombre }}<small>{{ e.capacidad }} pers. · {{ e.hora_apertura }}–{{ e.hora_cierre }}</small></th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for fila in tabla.filas %}
+        <tr>
+            <th class="calendario__hora">{{ fila.desde }}</th>
+            {% for celda in fila.celdas %}
+                {% if celda.estado == 'libre' %}
+                <td class="celda celda--libre">
+                    <a href="{{ url_for('reservas.crear', espacio_id=celda.espacio_id, fecha=tabla.fecha, hora_inicio=celda.desde, hora_fin=celda.hasta) }}" title="Reservar {{ celda.desde }}–{{ celda.hasta }}"></a>
+                </td>
+                {% elif celda.estado == 'reservado' %}
+                {% set r = celda.reserva %}
+                <td class="celda celda--reservado {{ 'celda--inicio' if celda.primera }}" title="{{ r.hora_inicio }}–{{ r.hora_fin }} · {{ r.usuario }} · {{ r.proposito }}">
+                    {% if celda.primera %}
+                    <a href="{{ url_for('reservas.editar', reserva_id=r.id) }}">
+                        <strong>{{ r.hora_inicio }}–{{ r.hora_fin }}</strong>
+                        <span>{{ r.usuario }}</span>
+                    </a>
+                    {% endif %}
+                </td>
+                {% else %}
+                <td class="celda celda--cerrado"></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="vacio">No hay espacios habilitados. <a href="{{ url_for('espacios.crear') }}">Registre uno</a>.</p>
+{% endif %}
+{% endblock %}

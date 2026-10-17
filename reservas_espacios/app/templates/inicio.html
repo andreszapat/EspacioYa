@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="encabezado">
+    <div>
+        <h1>Panel de reservas</h1>
+        <p class="sutil">Hoy es {{ hoy | fecha_larga }}</p>
+    </div>
+    <a class="boton boton--primario" href="{{ url_for('reservas.crear') }}">+ Nueva reserva</a>
+</section>
+
+<section class="tarjetas">
+    <a class="tarjeta-dato" href="{{ url_for('espacios.listar') }}">
+        <span class="tarjeta-dato__valor">{{ total_espacios }}</span><span>Espacios registrados</span>
+    </a>
+    <a class="tarjeta-dato" href="{{ url_for('usuarios.listar') }}">
+        <span class="tarjeta-dato__valor">{{ total_usuarios }}</span><span>Usuarios</span>
+    </a>
+    <a class="tarjeta-dato" href="{{ url_for('reservas.calendario') }}">
+        <span class="tarjeta-dato__valor">{{ reservas_hoy | length }}</span><span>Reservas para hoy</span>
+    </a>
+</section>
+
+<section class="panel">
+    <div class="panel__titulo">
+        <h2>Próximas reservas</h2>
+        <a href="{{ url_for('reservas.listar') }}">Ver todas →</a>
+    </div>
+    {% if proximas %}
+        <ul class="lista-reservas">
+        {% for r in proximas %}
+            <li>
+                <div class="lista-reservas__hora">{{ r.fecha }}<br><strong>{{ r.hora_inicio }}–{{ r.hora_fin }}</strong></div>
+                <div><strong>{{ r.espacio }}</strong> · {{ r.usuario }}<br><span class="sutil">{{ r.proposito }}</span></div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="vacio">No hay reservas próximas. <a href="{{ url_for('reservas.crear') }}">Crear la primera</a>.</p>
+    {% endif %}
+</section>
+{% endblock %}

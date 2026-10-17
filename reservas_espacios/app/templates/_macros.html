@@ -1,0 +1,10 @@
+{% macro boton_eliminar(url, pregunta, volver=None) -%}
+<form method="post" action="{{ url }}" class="en-linea" onsubmit="return confirm('{{ pregunta }}');">
+    {% if volver %}<input type="hidden" name="volver" value="{{ volver }}">{% endif %}
+    <button type="submit" class="boton boton--peligro boton--chico">Eliminar</button>
+</form>
+{%- endmacro %}
+
+{% macro etiqueta_rol(rol) -%}
+<span class="insignia insignia--{{ rol }}">{{ rol | capitalize }}</span>
+{%- endmacro %}
